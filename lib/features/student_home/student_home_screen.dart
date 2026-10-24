@@ -21,6 +21,12 @@ class StudentHomeScreen extends StatelessWidget {
         const SizedBox(height: 16),
         _profileChecklist(context),
         const SizedBox(height: 18),
+        OutlinedButton.icon(
+          onPressed: () => context.push('/career'),
+          icon: const Icon(Icons.route_outlined),
+          label: const Text('Khám phá lộ trình nghề nghiệp'),
+        ),
+        const SizedBox(height: 12),
         Row(
           children: [
             const Expanded(

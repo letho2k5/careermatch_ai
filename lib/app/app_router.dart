@@ -6,6 +6,10 @@ import '../features/cv/screens/cv_progress_screen.dart';
 import '../features/cv/screens/cv_result_screen.dart';
 import '../features/cv/screens/cv_upload_screen.dart';
 import '../features/cv/screens/edit_extracted_skills_screen.dart';
+import '../features/career_guidance/screens/career_dashboard_screen.dart';
+import '../features/career_guidance/screens/career_skill_screens.dart';
+import '../features/career_guidance/screens/learning_resource_screens.dart';
+import '../features/career_guidance/screens/career_goal_screens.dart';
 import '../features/jobs/screens/job_detail_screens.dart';
 import '../features/jobs/screens/job_filter_sort_screens.dart';
 import '../features/jobs/screens/job_home_screen.dart';
@@ -82,6 +86,61 @@ final GoRouter appRouter = GoRouter(
       path: '/student-home',
       name: 'student-home',
       builder: (_, _) => const StudentHomeScreen(),
+    ),
+    GoRoute(
+      path: '/career',
+      name: 'career-dashboard',
+      builder: (_, _) => const CareerDashboardScreen(),
+    ),
+    GoRoute(
+      path: '/career/skills',
+      name: 'career-skills',
+      builder: (_, _) => const SkillOverviewScreen(),
+    ),
+    GoRoute(
+      path: '/career/skill-gap',
+      name: 'career-skill-gap',
+      builder: (_, _) => const SkillGapSummaryScreen(),
+    ),
+    GoRoute(
+      path: '/career/missing-skill/:skillId',
+      name: 'career-missing-skill',
+      builder: (_, state) =>
+          MissingSkillDetailScreen(skillId: state.pathParameters['skillId']!),
+    ),
+    GoRoute(
+      path: '/career/skill-priority',
+      name: 'career-skill-priority',
+      builder: (_, _) => const SkillPriorityScreen(),
+    ),
+    GoRoute(
+      path: '/career/resources',
+      name: 'career-learning-resources',
+      builder: (_, state) =>
+          LearningResourcesScreen(skill: state.uri.queryParameters['skill']),
+    ),
+    GoRoute(
+      path: '/career/resource/:resourceId',
+      name: 'career-resource-detail',
+      builder: (_, state) => LearningResourceDetailScreen(
+        resourceId: state.pathParameters['resourceId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/career/goals',
+      name: 'career-goals',
+      builder: (_, _) => const CareerGoalSelectScreen(),
+    ),
+    GoRoute(
+      path: '/career/goals/:goalId',
+      name: 'career-goal-detail',
+      builder: (_, state) =>
+          CareerGoalDetailScreen(goalId: state.pathParameters['goalId']!),
+    ),
+    GoRoute(
+      path: '/career/roadmap',
+      name: 'career-roadmap',
+      builder: (_, _) => const RoadmapOverviewScreen(),
     ),
     GoRoute(
       path: '/student-profile-setup-1',
