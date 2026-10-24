@@ -81,55 +81,65 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _badge('AI MATCHING ENGINE LIVE'),
-              const SizedBox(height: 34),
-              Container(
-                width: 116,
-                height: 116,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: const [
-                    BoxShadow(color: Color(0x18305B8D), blurRadius: 36),
+      child: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _badge('AI MATCHING ENGINE LIVE'),
+                    const SizedBox(height: 34),
+                    Container(
+                      width: 116,
+                      height: 116,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: const [
+                          BoxShadow(color: Color(0x18305B8D), blurRadius: 36),
+                        ],
+                      ),
+                      child: Image.asset(
+                        'assets/images/career_match_logo.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    Text(
+                      'CareerMatch AI',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Cầu nối nghề nghiệp thông minh cho sinh viên',
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    const CircularProgressIndicator(strokeWidth: 2),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Đang chuẩn bị hồ sơ...',
+                      style: TextStyle(color: AppColors.textMuted),
+                    ),
+                    const SizedBox(height: 30),
+                    _badge('SDG 8  •  DECENT WORK'),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'v2.0 • Academic Prototype',
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 12,
+                      ),
+                    ),
                   ],
                 ),
-                child: Image.asset(
-                  'assets/images/career_match_logo.png',
-                  fit: BoxFit.contain,
-                ),
               ),
-              const SizedBox(height: 22),
-              Text(
-                'CareerMatch AI',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Cầu nối nghề nghiệp thông minh cho sinh viên',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 30),
-              const CircularProgressIndicator(strokeWidth: 2),
-              const SizedBox(height: 12),
-              const Text(
-                'Đang chuẩn bị hồ sơ...',
-                style: TextStyle(color: AppColors.textMuted),
-              ),
-              const SizedBox(height: 30),
-              _badge('SDG 8  •  DECENT WORK'),
-              const SizedBox(height: 20),
-              const Text(
-                'v2.0 • Academic Prototype',
-                style: TextStyle(color: AppColors.textMuted, fontSize: 12),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -144,8 +154,9 @@ class WelcomeScreen extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          runSpacing: 4,
           children: [
             _badge('SDG 8: DECENT WORK'),
             TextButton(onPressed: () {}, child: const Text('VI  |  EN')),
@@ -250,8 +261,9 @@ class OnboardingOneScreen extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          runSpacing: 4,
           children: [
             const Text(
               'Giới thiệu hệ thống',
@@ -310,8 +322,9 @@ class OnboardingTwoScreen extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          runSpacing: 4,
           children: [
             const Text(
               'Giới thiệu hệ thống',
@@ -342,15 +355,17 @@ class OnboardingTwoScreen extends StatelessWidget {
           ),
           child: const Column(
             children: [
-              Row(
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   Icon(Icons.person_outline),
-                  SizedBox(width: 10),
-                  Expanded(child: Text('Kỹ năng hiện tại')),
+                  Text('Kỹ năng hiện tại'),
                   Icon(Icons.arrow_forward, color: AppColors.blue),
                   SizedBox(width: 8),
                   Icon(Icons.work_outline),
-                  SizedBox(width: 8),
                   Text('Yêu cầu công việc'),
                 ],
               ),

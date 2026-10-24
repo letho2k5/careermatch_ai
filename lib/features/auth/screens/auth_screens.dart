@@ -481,6 +481,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                   context,
                   'Đăng nhập chỉ là UI demo, chưa kết nối tài khoản.',
                 );
+                context.go('/student-home');
               }
             },
           ),
