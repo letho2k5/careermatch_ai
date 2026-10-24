@@ -97,4 +97,21 @@ void main() {
     expect(find.text('Thực tập sinh Lập trình Backend'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('unknown job and company IDs show not found states', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const ProviderScope(child: CareerMatchApp()));
+
+    for (final route in [
+      '/jobs/missing-job',
+      '/jobs/missing-job/match',
+      '/companies/missing-company',
+    ]) {
+      appRouter.go(route);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('không tồn tại'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    }
+  });
 }

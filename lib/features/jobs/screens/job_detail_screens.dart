@@ -20,10 +20,14 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final job = demoJobs.firstWhere(
-      (item) => item.id == widget.jobId,
-      orElse: () => demoJobs.first,
-    );
+    final jobs = demoJobs.where((item) => item.id == widget.jobId);
+    if (jobs.isEmpty) {
+      return const JobScreenScaffold(
+        title: 'Không tìm thấy việc làm',
+        body: Center(child: Text('Việc làm này không tồn tại.')),
+      );
+    }
+    final job = jobs.first;
     final saved = ref.watch(
       jobDiscoveryProvider.select((s) => s.savedIds.contains(job.id)),
     );
@@ -33,7 +37,10 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
       actions: [
         IconButton(
           tooltip: saved ? 'Bỏ lưu việc làm' : 'Lưu việc làm',
-          onPressed: () => controller.toggleSaved(job.id),
+          onPressed: () {
+            controller.toggleSaved(job.id);
+            context.push('/jobs/${job.id}/save-confirmation');
+          },
           icon: Icon(
             saved ? Icons.favorite : Icons.favorite_border,
             color: saved ? AppColors.error : null,
@@ -50,14 +57,16 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
         children: [
           IconButton.filledTonal(
             tooltip: saved ? 'Bỏ lưu việc làm' : 'Lưu việc làm',
-            onPressed: () => controller.toggleSaved(job.id),
+            onPressed: () {
+              controller.toggleSaved(job.id);
+              context.push('/jobs/${job.id}/save-confirmation');
+            },
             icon: Icon(saved ? Icons.favorite : Icons.favorite_border),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: FilledButton.icon(
-              onPressed: () =>
-                  _message(context, 'Ứng tuyển trực tiếp chưa được kết nối.'),
+              onPressed: () => context.push('/jobs/${job.id}/apply'),
               icon: const Icon(Icons.send_outlined),
               label: const Text('Ứng tuyển ngay'),
             ),
@@ -161,7 +170,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
           const SizedBox(height: 12),
           _sectionContent(job),
           const SizedBox(height: 12),
-          _skillsCard(job),
+          _skillsCard(context, job),
           const SizedBox(height: 12),
           _roadmapCard(),
         ],
@@ -369,7 +378,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
     );
   }
 
-  Widget _skillsCard(Job job) => Container(
+  Widget _skillsCard(BuildContext context, Job job) => Container(
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -393,6 +402,12 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
           children: job.skills
               .map((skill) => JobPill(skill, color: AppColors.surfaceMuted))
               .toList(),
+        ),
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          onPressed: () => context.push('/jobs/${job.id}/compare-skills'),
+          icon: const Icon(Icons.compare_arrows),
+          label: const Text('Đối chiếu kỹ năng'),
         ),
       ],
     ),
@@ -460,6 +475,13 @@ class CompanyDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final jobs = demoJobs.where((job) => job.companyId == companyId).toList();
+    if (jobs.isEmpty) {
+      return const JobScreenScaffold(
+        title: 'Không tìm thấy công ty',
+        body: Center(child: Text('Công ty này không tồn tại.')),
+      );
+    }
     final company = switch (companyId) {
       'vng' => 'VNG Corporation',
       'momo' => 'MoMo (M_Service)',
@@ -468,7 +490,6 @@ class CompanyDetailScreen extends ConsumerWidget {
       'viettel' => 'Viettel Solutions',
       _ => 'FPT Software',
     };
-    final jobs = demoJobs.where((job) => job.companyId == companyId).toList();
     return JobScreenScaffold(
       title: 'Chi tiết công ty',
       actions: [
@@ -976,8 +997,7 @@ class RecommendedJobsScreen extends ConsumerWidget {
             const SizedBox(width: 4),
             Expanded(
               child: FilledButton.icon(
-                onPressed: () =>
-                    _message(context, 'Ứng tuyển trực tiếp chưa được kết nối.'),
+                onPressed: () => context.push('/jobs/${job.id}/apply'),
                 icon: const Icon(Icons.send_outlined, size: 15),
                 label: const Text(
                   'Ứng tuyển ngay',
@@ -991,10 +1011,6 @@ class RecommendedJobsScreen extends ConsumerWidget {
       ],
     ),
   );
-
-  static void _message(BuildContext context, String message) =>
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
 }
 
 class _JobsBottomBar extends StatelessWidget {
@@ -1031,27 +1047,27 @@ class MatchExplanationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final job = demoJobs.firstWhere(
-      (item) => item.id == jobId,
-      orElse: () => demoJobs.first,
-    );
+    final jobs = demoJobs.where((item) => item.id == jobId);
+    if (jobs.isEmpty) {
+      return const JobScreenScaffold(
+        title: 'Không tìm thấy việc làm',
+        body: Center(child: Text('Việc làm này không tồn tại.')),
+      );
+    }
+    final job = jobs.first;
     return JobScreenScaffold(
       title: 'Phân tích mức độ phù hợp',
       bottomAction: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           FilledButton.icon(
-            onPressed: () =>
-                _message(context, 'Ứng tuyển trực tiếp chưa được kết nối.'),
+            onPressed: () => context.push('/jobs/$jobId/apply'),
             icon: const Icon(Icons.send_outlined),
             label: const Text('Tiến hành nộp đơn ứng tuyển'),
           ),
           const SizedBox(height: 5),
           TextButton.icon(
-            onPressed: () => _message(
-              context,
-              'So sánh kỹ năng trực quan nằm ngoài phạm vi giai đoạn này.',
-            ),
+            onPressed: () => context.push('/jobs/$jobId/compare-skills'),
             icon: const Icon(Icons.compare_arrows, size: 16),
             label: const Text('So sánh trực quan kỹ năng'),
           ),
@@ -1273,10 +1289,6 @@ class MatchExplanationScreen extends ConsumerWidget {
           ],
         ),
       );
-
-  static void _message(BuildContext context, String message) =>
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
 }
 
 class _EthicsNote extends StatelessWidget {

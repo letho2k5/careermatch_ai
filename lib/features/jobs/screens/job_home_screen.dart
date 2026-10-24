@@ -23,6 +23,14 @@ class JobHomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: () => context.push('/jobs/saved'),
+                    icon: const Icon(Icons.bookmarks_outlined, size: 18),
+                    label: const Text('Việc làm đã lưu'),
+                  ),
+                ),
                 InkWell(
                   onTap: () => context.push('/jobs/search'),
                   borderRadius: BorderRadius.circular(14),

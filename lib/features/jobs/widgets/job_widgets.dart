@@ -236,7 +236,10 @@ class JobCard extends ConsumerWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm',
-                    onPressed: () => controller.toggleSaved(job.id),
+                    onPressed: () {
+                      controller.toggleSaved(job.id);
+                      context.push('/jobs/${job.id}/save-confirmation');
+                    },
                     icon: Icon(
                       isSaved ? Icons.bookmark : Icons.bookmark_border,
                       color: isSaved ? AppColors.blue : AppColors.textMuted,

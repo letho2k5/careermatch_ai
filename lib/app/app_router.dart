@@ -10,6 +10,13 @@ import '../features/jobs/screens/job_detail_screens.dart';
 import '../features/jobs/screens/job_filter_sort_screens.dart';
 import '../features/jobs/screens/job_home_screen.dart';
 import '../features/jobs/screens/job_search_screens.dart';
+import '../features/jobs/screens/job_compare_skills_screen.dart';
+import '../features/jobs/screens/job_saved_screens.dart';
+import '../features/jobs/screens/apply_step_one_screen.dart';
+import '../features/jobs/screens/select_cv_screen.dart';
+import '../features/jobs/screens/application_review_screen.dart';
+import '../features/jobs/screens/application_success_screen.dart';
+import '../features/jobs/screens/application_tracking_screens.dart';
 import '../features/onboarding/screens/onboarding_screens.dart';
 import '../features/student_home/student_home_screen.dart';
 import '../features/student_profile/screens/education_screen.dart';
@@ -157,6 +164,70 @@ final GoRouter appRouter = GoRouter(
       path: '/jobs/recommended',
       name: 'recommended-jobs',
       builder: (_, _) => const RecommendedJobsScreen(),
+    ),
+    GoRoute(
+      path: '/jobs/saved',
+      name: 'saved-jobs',
+      builder: (_, _) => const SavedJobsScreen(),
+    ),
+    GoRoute(
+      path: '/jobs/:jobId/compare-skills',
+      name: 'compare-job-skills',
+      builder: (_, state) =>
+          CompareSkillsScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/jobs/:jobId/save-confirmation',
+      name: 'save-confirmation',
+      pageBuilder: (_, state) => MaterialPage<void>(
+        key: state.pageKey,
+        child: SaveConfirmationScreen(jobId: state.pathParameters['jobId']!),
+        fullscreenDialog: true,
+      ),
+    ),
+    GoRoute(
+      path: '/jobs/:jobId/apply',
+      name: 'apply-step-one',
+      builder: (_, state) =>
+          ApplyStepOneScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/jobs/:jobId/select-cv',
+      name: 'select-application-cv',
+      builder: (_, state) =>
+          SelectCvScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/jobs/:jobId/application-review',
+      name: 'application-review',
+      builder: (_, state) =>
+          ApplicationReviewScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/applications',
+      name: 'my-applications',
+      builder: (_, _) => const MyApplicationsScreen(),
+    ),
+    GoRoute(
+      path: '/applications/:applicationId/success',
+      name: 'application-success',
+      builder: (_, state) => ApplicationSuccessScreen(
+        applicationId: state.pathParameters['applicationId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/applications/:applicationId/timeline',
+      name: 'application-timeline',
+      builder: (_, state) => ApplicationTimelineScreen(
+        applicationId: state.pathParameters['applicationId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/applications/:applicationId',
+      name: 'application-detail',
+      builder: (_, state) => ApplicationDetailScreen(
+        applicationId: state.pathParameters['applicationId']!,
+      ),
     ),
     GoRoute(
       path: '/companies/:companyId',

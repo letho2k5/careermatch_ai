@@ -77,7 +77,10 @@ class StudentAppShell extends StatelessWidget {
             if (index == 0) context.go('/student-home');
             if (index == 1) context.go('/jobs/home');
             if (index == 4) context.go('/student-profile-setup-1');
-            if (index != 0 && index != 1 && index != 4) _notAvailable(context);
+            if (index == 3) context.go('/applications');
+            if (index != 0 && index != 1 && index != 3 && index != 4) {
+              _notAvailable(context);
+            }
           },
           destinations: const [
             NavigationDestination(
