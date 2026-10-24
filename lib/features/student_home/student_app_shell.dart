@@ -70,32 +70,36 @@ class StudentAppShell extends StatelessWidget {
         NavigationBar(
           height: 64,
           selectedIndex: selectedTab,
+          labelBehavior: MediaQuery.sizeOf(context).width < 360
+              ? NavigationDestinationLabelBehavior.onlyShowSelected
+              : NavigationDestinationLabelBehavior.alwaysShow,
           onDestinationSelected: (index) {
             if (index == 0) context.go('/student-home');
+            if (index == 1) context.go('/jobs/home');
             if (index == 4) context.go('/student-profile-setup-1');
-            if (index != 0 && index != 4) _notAvailable(context);
+            if (index != 0 && index != 1 && index != 4) _notAvailable(context);
           },
           destinations: const [
             NavigationDestination(
               icon: Icon(Icons.home_outlined),
               selectedIcon: Icon(Icons.home),
-              label: 'Home',
+              label: 'Trang chủ',
             ),
             NavigationDestination(
               icon: Icon(Icons.work_outline),
-              label: 'Jobs',
+              label: 'Việc làm',
             ),
             NavigationDestination(
               icon: Icon(Icons.trending_up),
-              label: 'Growth',
+              label: 'Lộ trình',
             ),
             NavigationDestination(
               icon: Icon(Icons.assignment_outlined),
-              label: 'Applied',
+              label: 'Đã ứng tuyển',
             ),
             NavigationDestination(
               icon: Icon(Icons.person_outline),
-              label: 'Profile',
+              label: 'Cá nhân',
             ),
           ],
         ),
