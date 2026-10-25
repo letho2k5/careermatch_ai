@@ -6,14 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  test('ten employer routes have distinct paths and names', () {
+  test('employer routes have distinct paths and names', () {
     final routes = appRouter.configuration.routes
         .whereType<GoRoute>()
         .where((route) => route.name?.startsWith('employer-') == true)
         .toList();
-    expect(routes, hasLength(10));
-    expect(routes.map((route) => route.path).toSet(), hasLength(10));
-    expect(routes.map((route) => route.name).toSet(), hasLength(10));
+    expect(routes, hasLength(20));
+    expect(routes.map((route) => route.path).toSet(), hasLength(20));
+    expect(routes.map((route) => route.name).toSet(), hasLength(20));
   });
 
   testWidgets('employer signup validates required fields and email', (

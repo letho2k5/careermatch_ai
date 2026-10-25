@@ -369,17 +369,10 @@ class JobPreviewScreen extends ConsumerWidget {
           Expanded(
             flex: 2,
             child: AppPrimaryButton(
-              label: 'Lưu bản nháp',
+              label: 'Gửi duyệt tin',
               icon: Icons.save_outlined,
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Bản nháp giữ trong phiên chạy; chưa đăng lên hệ thống.',
-                    ),
-                  ),
-                );
-                context.go('/employer/jobs');
+                context.go('/employer/jobs/submit');
               },
             ),
           ),

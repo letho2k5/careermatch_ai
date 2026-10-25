@@ -111,6 +111,24 @@ class EmployerDashboardScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: [
+                ActionChip(
+                  label: const Text('Ứng viên'),
+                  onPressed: () => context.go('/employer/candidates'),
+                ),
+                ActionChip(
+                  label: const Text('Shortlist'),
+                  onPressed: () => context.go('/employer/shortlist'),
+                ),
+                ActionChip(
+                  label: const Text('Phỏng vấn'),
+                  onPressed: () => context.go('/employer/interviews'),
+                ),
+              ],
+            ),
             const SizedBox(height: 20),
             const Text(
               'Ứng viên tiềm năng khớp cao',
@@ -242,6 +260,17 @@ class _EmployerJobListingsScreenState
                   ),
                 ),
               ),
+            for (final listing in state.listings.where(
+              (item) => item.fields['title']!.toLowerCase().contains(query),
+            ))
+              Card(
+                child: ListTile(
+                  title: Text(listing.fields['title'] ?? ''),
+                  subtitle: Text('${listing.status} · tin demo'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.go('/employer/jobs/${listing.id}'),
+                ),
+              ),
             if (backendMatches) ...[
               const SizedBox(height: 10),
               const _SampleJobCard(
@@ -273,6 +302,24 @@ class _EmployerJobListingsScreenState
               label: 'Đăng tin tuyển dụng mới',
               icon: Icons.add,
               onPressed: () => context.go('/employer/jobs/create/step-1'),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: [
+                ActionChip(
+                  label: const Text('Ứng viên'),
+                  onPressed: () => context.go('/employer/candidates'),
+                ),
+                ActionChip(
+                  label: const Text('Shortlist'),
+                  onPressed: () => context.go('/employer/shortlist'),
+                ),
+                ActionChip(
+                  label: const Text('Quản lý phỏng vấn'),
+                  onPressed: () => context.go('/employer/interviews'),
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             employerDemoNotice(

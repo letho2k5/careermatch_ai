@@ -35,6 +35,7 @@ import '../features/employer/screens/employer_auth_screens.dart';
 import '../features/employer/screens/company_screens.dart';
 import '../features/employer/screens/employer_workspace_screens.dart';
 import '../features/employer/screens/job_creation_screens.dart';
+import '../features/employer/screens/employer_phase_eight_screens.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -415,6 +416,63 @@ final GoRouter appRouter = GoRouter(
       path: '/employer/jobs/create/preview',
       name: 'employer-job-preview',
       builder: (_, _) => const JobPreviewScreen(),
+    ),
+    GoRoute(
+      path: '/employer/jobs/submit',
+      name: 'employer-job-submit',
+      builder: (_, _) => const SubmitEmployerJobScreen(),
+    ),
+    GoRoute(
+      path: '/employer/jobs/pending',
+      name: 'employer-job-pending',
+      builder: (_, state) =>
+          EmployerJobPendingScreen(jobId: state.uri.queryParameters['jobId']),
+    ),
+    GoRoute(
+      path: '/employer/jobs/:jobId/edit',
+      name: 'employer-job-edit',
+      builder: (_, state) =>
+          EditEmployerJobScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/employer/jobs/:jobId',
+      name: 'employer-job-detail',
+      builder: (_, state) =>
+          EmployerJobDetailScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/employer/candidates/filters',
+      name: 'employer-candidate-filters',
+      builder: (_, _) => const EmployerCandidateFiltersScreen(),
+    ),
+    GoRoute(
+      path: '/employer/candidates/:candidateId/invite',
+      name: 'employer-interview-invite',
+      builder: (_, state) => EmployerInterviewInviteScreen(
+        candidateId: state.pathParameters['candidateId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/employer/candidates/:candidateId',
+      name: 'employer-candidate-detail',
+      builder: (_, state) => EmployerCandidateDetailScreen(
+        candidateId: state.pathParameters['candidateId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/employer/candidates',
+      name: 'employer-candidate-list',
+      builder: (_, _) => const EmployerCandidateListScreen(),
+    ),
+    GoRoute(
+      path: '/employer/shortlist',
+      name: 'employer-shortlist',
+      builder: (_, _) => const EmployerShortlistScreen(),
+    ),
+    GoRoute(
+      path: '/employer/interviews',
+      name: 'employer-interviews',
+      builder: (_, _) => const EmployerInterviewManagementScreen(),
     ),
   ],
   errorBuilder: (_, state) => Scaffold(
