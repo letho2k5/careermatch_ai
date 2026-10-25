@@ -4,7 +4,10 @@ import '../models/employer_demo_models.dart';
 
 class EmployerDemoController extends Notifier<EmployerDemoState> {
   @override
-  EmployerDemoState build() => const EmployerDemoState();
+  EmployerDemoState build() => const EmployerDemoState(
+    companyApplications: adminDemoCompanyApplications,
+    adminListings: adminDemoJobListings,
+  );
 
   void setCompanyField(String key, String value) {
     state = state.copyWith(company: {...state.company, key: value});
@@ -15,10 +18,52 @@ class EmployerDemoController extends Notifier<EmployerDemoState> {
   }
 
   EmployerJobListing? listing(String id) {
-    for (final item in state.listings) {
+    for (final item in [...state.listings, ...state.adminListings]) {
       if (item.id == id) return item;
     }
     return null;
+  }
+
+  EmployerCompanyApplication? companyApplication(String id) {
+    for (final item in state.companyApplications) {
+      if (item.id == id) return item;
+    }
+    return null;
+  }
+
+  bool moderateCompany(String id, {required bool approved, String? reason}) {
+    if (!state.companyApplications.any((item) => item.id == id)) return false;
+    state = state.copyWith(
+      companyApplications: [
+        for (final item in state.companyApplications)
+          if (item.id == id)
+            item.copyWith(
+              status: approved ? 'Đã duyệt (demo)' : 'Từ chối (demo)',
+              moderationReason: approved ? null : reason,
+            )
+          else
+            item,
+      ],
+    );
+    return true;
+  }
+
+  bool moderateJob(String id, {required bool approved, String? reason}) {
+    final exists = listing(id) != null;
+    if (!exists) return false;
+    EmployerJobListing update(EmployerJobListing item) => item.id == id
+        ? EmployerJobListing(
+            id: item.id,
+            fields: item.fields,
+            status: approved ? 'Đã duyệt (demo)' : 'Từ chối (demo)',
+            moderationReason: approved ? null : reason,
+          )
+        : item;
+    state = state.copyWith(
+      listings: state.listings.map(update).toList(growable: false),
+      adminListings: state.adminListings.map(update).toList(growable: false),
+    );
+    return true;
   }
 
   String? submitDraft() {
@@ -48,6 +93,7 @@ class EmployerDemoController extends Notifier<EmployerDemoState> {
               id: item.id,
               fields: Map.unmodifiable(fields),
               status: item.status,
+              moderationReason: item.moderationReason,
             )
           else
             item,

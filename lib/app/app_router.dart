@@ -36,6 +36,9 @@ import '../features/employer/screens/company_screens.dart';
 import '../features/employer/screens/employer_workspace_screens.dart';
 import '../features/employer/screens/job_creation_screens.dart';
 import '../features/employer/screens/employer_phase_eight_screens.dart';
+import '../features/admin/screens/admin_auth_dashboard_screens.dart';
+import '../features/admin/screens/admin_company_review_screens.dart';
+import '../features/admin/screens/admin_job_review_screens.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -473,6 +476,65 @@ final GoRouter appRouter = GoRouter(
       path: '/employer/interviews',
       name: 'employer-interviews',
       builder: (_, _) => const EmployerInterviewManagementScreen(),
+    ),
+    GoRoute(
+      path: '/admin/login',
+      name: 'admin-login',
+      builder: (_, _) => const AdminLoginScreen(),
+    ),
+    GoRoute(
+      path: '/admin/dashboard',
+      name: 'admin-dashboard',
+      builder: (_, _) => const AdminDashboardScreen(),
+    ),
+    GoRoute(
+      path: '/admin/companies/pending',
+      name: 'admin-companies-pending',
+      builder: (_, _) => const AdminCompaniesPendingScreen(),
+    ),
+    GoRoute(
+      path: '/admin/companies/:companyId/review',
+      name: 'admin-company-review',
+      builder: (_, state) => AdminCompanyReviewDetailScreen(
+        companyId: state.pathParameters['companyId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/admin/companies/:companyId/approve',
+      name: 'admin-company-approve',
+      builder: (_, state) => AdminApproveCompanyScreen(
+        companyId: state.pathParameters['companyId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/admin/companies/:companyId/reject',
+      name: 'admin-company-reject',
+      builder: (_, state) => AdminRejectCompanyScreen(
+        companyId: state.pathParameters['companyId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/admin/jobs/pending',
+      name: 'admin-jobs-pending',
+      builder: (_, _) => const AdminJobsPendingScreen(),
+    ),
+    GoRoute(
+      path: '/admin/jobs/:jobId/review',
+      name: 'admin-job-review',
+      builder: (_, state) =>
+          AdminJobReviewDetailScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/admin/jobs/:jobId/approve',
+      name: 'admin-job-approve',
+      builder: (_, state) =>
+          AdminApproveJobScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/admin/jobs/:jobId/reject',
+      name: 'admin-job-reject',
+      builder: (_, state) =>
+          AdminRejectJobScreen(jobId: state.pathParameters['jobId']!),
     ),
   ],
   errorBuilder: (_, state) => Scaffold(
