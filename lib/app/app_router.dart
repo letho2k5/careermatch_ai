@@ -10,6 +10,10 @@ import '../features/career_guidance/screens/career_dashboard_screen.dart';
 import '../features/career_guidance/screens/career_skill_screens.dart';
 import '../features/career_guidance/screens/learning_resource_screens.dart';
 import '../features/career_guidance/screens/career_goal_screens.dart';
+import '../features/career_guidance/screens/career_milestone_screens.dart';
+import '../features/career_guidance/screens/assessment_screens.dart';
+import '../features/career_guidance/screens/interview_practice_screens.dart';
+import '../features/career_guidance/screens/ai_limitations_privacy_screen.dart';
 import '../features/jobs/screens/job_detail_screens.dart';
 import '../features/jobs/screens/job_filter_sort_screens.dart';
 import '../features/jobs/screens/job_home_screen.dart';
@@ -27,6 +31,10 @@ import '../features/student_profile/screens/education_screen.dart';
 import '../features/student_profile/screens/experience_screen.dart';
 import '../features/student_profile/screens/profile_setup_screens.dart';
 import '../features/student_profile/screens/skills_screen.dart';
+import '../features/employer/screens/employer_auth_screens.dart';
+import '../features/employer/screens/company_screens.dart';
+import '../features/employer/screens/employer_workspace_screens.dart';
+import '../features/employer/screens/job_creation_screens.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -141,6 +149,58 @@ final GoRouter appRouter = GoRouter(
       path: '/career/roadmap',
       name: 'career-roadmap',
       builder: (_, _) => const RoadmapOverviewScreen(),
+    ),
+    GoRoute(
+      path: '/career/roadmap/milestones',
+      name: 'career-roadmap-milestones',
+      builder: (_, _) => const CareerMilestonesScreen(),
+    ),
+    GoRoute(
+      path: '/career/roadmap/milestones/:milestoneId',
+      name: 'career-roadmap-milestone-detail',
+      builder: (_, state) => CareerMilestoneDetailScreen(
+        milestoneId: state.pathParameters['milestoneId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/career/progress',
+      name: 'career-progress',
+      builder: (_, _) => const CareerProgressTrackingScreen(),
+    ),
+    GoRoute(
+      path: '/career/assessment',
+      name: 'career-assessment-intro',
+      builder: (_, _) => const SkillAssessmentIntroScreen(),
+    ),
+    GoRoute(
+      path: '/career/assessment/question',
+      name: 'career-assessment-question',
+      builder: (_, _) => const SkillAssessmentQuestionScreen(),
+    ),
+    GoRoute(
+      path: '/career/assessment/result',
+      name: 'career-assessment-result',
+      builder: (_, _) => const SkillAssessmentResultScreen(),
+    ),
+    GoRoute(
+      path: '/career/interview-practice',
+      name: 'career-interview-intro',
+      builder: (_, _) => const InterviewPracticeIntroScreen(),
+    ),
+    GoRoute(
+      path: '/career/interview-practice/question',
+      name: 'career-interview-question',
+      builder: (_, _) => const InterviewPracticeQuestionScreen(),
+    ),
+    GoRoute(
+      path: '/career/interview-practice/feedback',
+      name: 'career-interview-feedback',
+      builder: (_, _) => const InterviewPracticeFeedbackScreen(),
+    ),
+    GoRoute(
+      path: '/career/ai-privacy',
+      name: 'career-ai-privacy',
+      builder: (_, _) => const AiLimitationsPrivacyScreen(),
     ),
     GoRoute(
       path: '/student-profile-setup-1',
@@ -305,6 +365,56 @@ final GoRouter appRouter = GoRouter(
       name: 'job-detail',
       builder: (_, state) =>
           JobDetailScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/employer/signup',
+      name: 'employer-signup',
+      builder: (_, _) => const EmployerSignupScreen(),
+    ),
+    GoRoute(
+      path: '/employer/login',
+      name: 'employer-login',
+      builder: (_, _) => const EmployerLoginScreen(),
+    ),
+    GoRoute(
+      path: '/employer/company/setup',
+      name: 'employer-company-setup',
+      builder: (_, _) => const CompanySetupScreen(),
+    ),
+    GoRoute(
+      path: '/employer/company/profile',
+      name: 'employer-company-profile',
+      builder: (_, _) => const CompanyProfileScreen(),
+    ),
+    GoRoute(
+      path: '/employer/company/verification',
+      name: 'employer-company-verification',
+      builder: (_, _) => const CompanyVerificationScreen(),
+    ),
+    GoRoute(
+      path: '/employer/dashboard',
+      name: 'employer-dashboard',
+      builder: (_, _) => const EmployerDashboardScreen(),
+    ),
+    GoRoute(
+      path: '/employer/jobs',
+      name: 'employer-job-listings',
+      builder: (_, _) => const EmployerJobListingsScreen(),
+    ),
+    GoRoute(
+      path: '/employer/jobs/create/step-1',
+      name: 'employer-job-create-step-1',
+      builder: (_, _) => const CreateJobStepOneScreen(),
+    ),
+    GoRoute(
+      path: '/employer/jobs/create/step-2',
+      name: 'employer-job-create-step-2',
+      builder: (_, _) => const CreateJobStepTwoScreen(),
+    ),
+    GoRoute(
+      path: '/employer/jobs/create/preview',
+      name: 'employer-job-preview',
+      builder: (_, _) => const JobPreviewScreen(),
     ),
   ],
   errorBuilder: (_, state) => Scaffold(

@@ -57,3 +57,51 @@ class SkillGap {
   final String skill;
   final bool hasSkill;
 }
+
+class CareerMilestoneTask {
+  const CareerMilestoneTask({
+    required this.id,
+    required this.title,
+    required this.description,
+    this.duration = '30–45 phút',
+  });
+
+  final String id;
+  final String title;
+  final String description;
+  final String duration;
+}
+
+class CareerMilestone {
+  const CareerMilestone({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.skills,
+    required this.tasks,
+  });
+
+  final String id;
+  final String title;
+  final String description;
+  final List<String> skills;
+  final List<CareerMilestoneTask> tasks;
+}
+
+class AssessmentQuestion {
+  const AssessmentQuestion({
+    required this.id,
+    required this.topic,
+    required this.prompt,
+    required this.options,
+    required this.correctIndex,
+    required this.explanation,
+  });
+
+  final String id;
+  final String topic;
+  final String prompt;
+  final List<String> options;
+  final int correctIndex;
+  final String explanation;
+}

@@ -409,18 +409,26 @@ class RoadmapOverviewScreen extends ConsumerWidget {
       );
     }
     final draft = ref.watch(careerDraftProvider);
-    final gaps = goal.skills
-        .where((skill) => !draftHasSkill(draft, skill))
-        .toList();
-    final completedResources = state.completedResourceIds.length;
-    final steps = <String>[
-      'Nền tảng kỹ thuật',
-      for (final skill in gaps.take(2)) skill,
-      'Thực hành dự án và tổng hợp',
-    ];
-    final percent = steps.isEmpty
+    final milestones = milestonesForGoal(goal, draft);
+    final totalTasks = milestones.fold<int>(
+      0,
+      (sum, milestone) => sum + milestone.tasks.length,
+    );
+    final completedTasks = milestones.fold<int>(
+      0,
+      (sum, milestone) =>
+          sum +
+          milestone.tasks
+              .where(
+                (task) => state.milestoneTaskDoneIds.contains(
+                  '${milestone.id}:${task.id}',
+                ),
+              )
+              .length,
+    );
+    final percent = totalTasks == 0
         ? 0
-        : (completedResources * 100 / steps.length).round().clamp(0, 100);
+        : (completedTasks * 100 / totalTasks).round();
     return CareerPage(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,7 +456,7 @@ class RoadmapOverviewScreen extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '${steps.length} chặng gợi ý',
+                        '${milestones.length} milestone · $completedTasks/$totalTasks nhiệm vụ',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 11,
@@ -477,14 +485,19 @@ class RoadmapOverviewScreen extends ConsumerWidget {
             'Lộ trình học tập chi tiết',
             trailing: CareerDemoNote(text: 'Mốc gợi ý'),
           ),
-          for (var index = 0; index < steps.length; index++) ...[
+          for (var index = 0; index < milestones.length; index++) ...[
             _RoadmapMilestone(
               index: index,
-              title: steps[index],
-              current: index == 0,
-              goal: goal,
+              milestone: milestones[index],
+              completedTasks: milestones[index].tasks
+                  .where(
+                    (task) => state.milestoneTaskDoneIds.contains(
+                      '${milestones[index].id}:${task.id}',
+                    ),
+                  )
+                  .length,
             ),
-            if (index != steps.length - 1)
+            if (index != milestones.length - 1)
               const Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: SizedBox(
@@ -511,6 +524,12 @@ class RoadmapOverviewScreen extends ConsumerWidget {
             icon: Icons.insights,
             onPressed: () => context.push('/career/skill-gap'),
           ),
+          const SizedBox(height: 8),
+          CareerPrimaryButton(
+            label: 'Xem milestone & tiến độ',
+            icon: Icons.route_outlined,
+            onPressed: () => context.push('/career/roadmap/milestones'),
+          ),
         ],
       ),
     );
@@ -520,69 +539,74 @@ class RoadmapOverviewScreen extends ConsumerWidget {
 class _RoadmapMilestone extends StatelessWidget {
   const _RoadmapMilestone({
     required this.index,
-    required this.title,
-    required this.current,
-    required this.goal,
+    required this.milestone,
+    required this.completedTasks,
   });
   final int index;
-  final String title;
-  final bool current;
-  final CareerGoal goal;
+  final CareerMilestone milestone;
+  final int completedTasks;
   @override
-  Widget build(BuildContext context) => CareerCard(
-    padding: const EdgeInsets.all(13),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 13,
-              backgroundColor: current
-                  ? AppColors.blue
-                  : AppColors.surfaceMuted,
-              child: Icon(
-                current ? Icons.play_arrow : Icons.lock_outline,
-                size: 15,
-                color: current ? Colors.white : AppColors.textMuted,
-              ),
-            ),
-            const SizedBox(width: 9),
-            Expanded(
-              child: Text(
-                'Chặng ${index + 1} · $title',
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.navy,
+  Widget build(BuildContext context) => InkWell(
+    onTap: () => context.push('/career/roadmap/milestones/${milestone.id}'),
+    borderRadius: BorderRadius.circular(14),
+    child: CareerCard(
+      padding: const EdgeInsets.all(13),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 13,
+                backgroundColor: completedTasks == milestone.tasks.length
+                    ? AppColors.blue
+                    : AppColors.surfaceMuted,
+                child: Icon(
+                  completedTasks == milestone.tasks.length
+                      ? Icons.check
+                      : Icons.route_outlined,
+                  size: 15,
+                  color: completedTasks == milestone.tasks.length
+                      ? Colors.white
+                      : AppColors.textMuted,
                 ),
               ),
-            ),
-            careerGapTag(current ? 'Gợi ý tiếp theo' : 'Chưa bắt đầu'),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          current
-              ? 'Bắt đầu bằng cách xem kỹ năng cần bổ sung cho mục tiêu ${goal.title}.'
-              : 'Mốc tham khảo trong lộ trình ${goal.title}.',
-          style: const TextStyle(
-            fontSize: 11,
-            color: AppColors.textSecondary,
-            height: 1.35,
+              const SizedBox(width: 9),
+              Expanded(
+                child: Text(
+                  'Chặng ${index + 1} · ${milestone.title}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.navy,
+                  ),
+                ),
+              ),
+              careerGapTag(
+                milestone.tasks.isNotEmpty &&
+                        completedTasks == milestone.tasks.length
+                    ? 'Hoàn tất'
+                    : '$completedTasks/${milestone.tasks.length}',
+              ),
+            ],
           ),
-        ),
-        if (current) ...[
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () => context.push('/career/skill-priority'),
-              child: const Text('Xem kỹ năng ưu tiên'),
+          const SizedBox(height: 8),
+          Text(
+            milestone.description,
+            style: const TextStyle(
+              fontSize: 11,
+              color: AppColors.textSecondary,
+              height: 1.35,
             ),
+          ),
+          const SizedBox(height: 9),
+          CareerProgressBar(
+            value: milestone.tasks.isEmpty
+                ? 0
+                : completedTasks / milestone.tasks.length,
           ),
         ],
-      ],
+      ),
     ),
   );
 }

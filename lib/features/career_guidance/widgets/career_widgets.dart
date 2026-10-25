@@ -5,15 +5,19 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../features/student_home/student_app_shell.dart';
 
 class CareerPage extends StatelessWidget {
-  const CareerPage({required this.child, this.bottomAction, super.key});
+  const CareerPage({
+    required this.child,
+    this.bottomAction,
+    this.useStudentShell = true,
+    super.key,
+  });
   final Widget child;
   final Widget? bottomAction;
+  final bool useStudentShell;
 
   @override
-  Widget build(BuildContext context) => StudentAppShell(
-    selectedTab: 2,
-    bottomAction: bottomAction,
-    child: SingleChildScrollView(
+  Widget build(BuildContext context) {
+    final scrollable = SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
       child: Center(
         child: ConstrainedBox(
@@ -21,8 +25,31 @@ class CareerPage extends StatelessWidget {
           child: child,
         ),
       ),
-    ),
-  );
+    );
+    if (useStudentShell) {
+      return StudentAppShell(
+        selectedTab: 2,
+        bottomAction: bottomAction,
+        child: scrollable,
+      );
+    }
+    return Scaffold(
+      backgroundColor: AppColors.canvas,
+      body: SafeArea(child: scrollable),
+      bottomNavigationBar: bottomAction == null
+          ? null
+          : Material(
+              color: Colors.white,
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: bottomAction!,
+                ),
+              ),
+            ),
+    );
+  }
 }
 
 class CareerBackHeader extends StatelessWidget {
