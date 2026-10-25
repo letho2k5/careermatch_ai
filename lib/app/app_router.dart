@@ -39,6 +39,10 @@ import '../features/employer/screens/employer_phase_eight_screens.dart';
 import '../features/admin/screens/admin_auth_dashboard_screens.dart';
 import '../features/admin/screens/admin_company_review_screens.dart';
 import '../features/admin/screens/admin_job_review_screens.dart';
+import '../features/admin/screens/admin_user_screens.dart';
+import '../features/admin/screens/admin_report_screens.dart';
+import '../features/admin/screens/admin_operations_screens.dart';
+import '../features/admin/screens/admin_state_template_screens.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -535,6 +539,59 @@ final GoRouter appRouter = GoRouter(
       name: 'admin-job-reject',
       builder: (_, state) =>
           AdminRejectJobScreen(jobId: state.pathParameters['jobId']!),
+    ),
+    GoRoute(
+      path: '/admin/users',
+      name: 'admin-users',
+      builder: (_, _) => const AdminUsersScreen(),
+    ),
+    GoRoute(
+      path: '/admin/users/:userId',
+      name: 'admin-user-detail',
+      builder: (_, state) =>
+          AdminUserDetailScreen(userId: state.pathParameters['userId']!),
+    ),
+    GoRoute(
+      path: '/admin/reports',
+      name: 'admin-reports',
+      builder: (_, _) => const AdminReportsScreen(),
+    ),
+    GoRoute(
+      path: '/admin/reports/:reportId',
+      name: 'admin-report-detail',
+      builder: (_, state) =>
+          AdminReportDetailScreen(reportId: state.pathParameters['reportId']!),
+    ),
+    GoRoute(
+      path: '/admin/skills',
+      name: 'admin-skills',
+      builder: (_, _) => const AdminSkillsScreen(),
+    ),
+    GoRoute(
+      path: '/admin/notifications',
+      name: 'admin-notifications',
+      builder: (_, _) => const AdminNotificationsScreen(),
+    ),
+    GoRoute(
+      path: '/admin/settings',
+      name: 'admin-settings',
+      builder: (_, _) => const AdminSettingsScreen(),
+    ),
+    GoRoute(
+      path: '/admin/empty',
+      name: 'admin-empty-state',
+      builder: (_, _) => const AdminEmptyStateScreen(),
+    ),
+    GoRoute(
+      path: '/admin/error',
+      name: 'admin-error-state',
+      builder: (_, _) => const AdminErrorStateScreen(),
+    ),
+    GoRoute(
+      path: '/admin/success',
+      name: 'admin-success-state',
+      builder: (_, state) =>
+          AdminSuccessStateScreen(title: state.uri.queryParameters['title']),
     ),
   ],
   errorBuilder: (_, state) => Scaffold(

@@ -163,3 +163,51 @@ class AdminField extends StatelessWidget {
     ),
   );
 }
+
+class AdminConsoleNav extends StatelessWidget {
+  const AdminConsoleNav({required this.selectedIndex, super.key});
+  final int selectedIndex;
+
+  static const _paths = [
+    '/admin/dashboard',
+    '/admin/companies/pending',
+    '/admin/users',
+    '/admin/reports',
+    '/admin/settings',
+  ];
+
+  @override
+  Widget build(BuildContext context) => NavigationBar(
+    selectedIndex: selectedIndex,
+    height: 64,
+    labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+    onDestinationSelected: (index) => context.go(_paths[index]),
+    destinations: const [
+      NavigationDestination(
+        icon: Icon(Icons.dashboard_outlined),
+        selectedIcon: Icon(Icons.dashboard),
+        label: 'Tổng quan',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.fact_check_outlined),
+        selectedIcon: Icon(Icons.fact_check),
+        label: 'Duyệt',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.people_outline),
+        selectedIcon: Icon(Icons.people),
+        label: 'Người dùng',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.flag_outlined),
+        selectedIcon: Icon(Icons.flag),
+        label: 'Báo cáo',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.settings_outlined),
+        selectedIcon: Icon(Icons.settings),
+        label: 'Cài đặt',
+      ),
+    ],
+  );
+}

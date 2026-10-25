@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  test('the router declares 90 unique screen paths and names', () {
+  test('the router declares 100 unique screen paths and names', () {
     final screens = appRouter.configuration.routes
         .whereType<GoRoute>()
         .where((route) => route.path != '/')
@@ -15,9 +15,9 @@ void main() {
     final paths = screens.map((route) => route.path).toSet();
     final names = screens.map((route) => route.name).toSet();
 
-    expect(screens, hasLength(90));
-    expect(paths, hasLength(90));
-    expect(names, hasLength(90));
+    expect(screens, hasLength(100));
+    expect(paths, hasLength(100));
+    expect(names, hasLength(100));
   });
 
   testWidgets('all ten named routes build their expected screen', (

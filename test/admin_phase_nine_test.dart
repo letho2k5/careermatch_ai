@@ -7,15 +7,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  test('ten admin routes are uniquely registered', () {
-    final routes = appRouter.configuration.routes
-        .whereType<GoRoute>()
-        .where((route) => route.name?.startsWith('admin-') == true)
-        .toList();
-    expect(routes, hasLength(10));
-    expect(routes.map((route) => route.path).toSet(), hasLength(10));
-    expect(routes.map((route) => route.name).toSet(), hasLength(10));
-  });
+  test(
+    'twenty admin routes across phases 9 and 10 are uniquely registered',
+    () {
+      final routes = appRouter.configuration.routes
+          .whereType<GoRoute>()
+          .where((route) => route.name?.startsWith('admin-') == true)
+          .toList();
+      expect(routes, hasLength(20));
+      expect(routes.map((route) => route.path).toSet(), hasLength(20));
+      expect(routes.map((route) => route.name).toSet(), hasLength(20));
+    },
+  );
 
   testWidgets('admin login validates fields and opens demo dashboard', (
     tester,
