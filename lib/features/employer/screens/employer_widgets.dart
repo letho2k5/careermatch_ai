@@ -18,34 +18,174 @@ class EmployerPage extends StatelessWidget {
   final List<Widget> actions;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: AppColors.canvas,
-    appBar: AppBar(
-      title: Text(title),
-      actions: actions,
-      leading: IconButton(
-        onPressed: () =>
-            context.canPop() ? context.pop() : context.go('/choose-role'),
-        icon: const Icon(Icons.arrow_back),
-      ),
-    ),
-    body: SafeArea(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 640),
-          child: child,
+  Widget build(BuildContext context) {
+    final path = GoRouterState.of(context).uri.path;
+    final showNavigation =
+        path != '/employer/signup' &&
+        path != '/employer/login' &&
+        path != '/employer/company/setup' &&
+        path != '/employer/company/verification';
+    final selectedIndex = path.startsWith('/employer/jobs')
+        ? 1
+        : path.startsWith('/employer/interviews') || path.endsWith('/invite')
+        ? 3
+        : path.startsWith('/employer/candidates') ||
+              path.startsWith('/employer/shortlist')
+        ? 2
+        : path.startsWith('/employer/company')
+        ? 4
+        : 0;
+    return Scaffold(
+      backgroundColor: AppColors.canvas,
+      appBar: AppBar(
+        toolbarHeight: 54,
+        titleSpacing: 4,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'CAREERMATCH RECRUITMENT',
+              style: TextStyle(
+                color: AppColors.blue,
+                fontSize: 8,
+                fontWeight: FontWeight.w700,
+                letterSpacing: .25,
+              ),
+            ),
+            Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.navy,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          if (showNavigation)
+            IconButton(
+              tooltip: 'Thông báo',
+              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Thông báo nhà tuyển dụng chưa có trong bản demo.',
+                  ),
+                ),
+              ),
+              icon: const Icon(Icons.notifications_none, size: 21),
+            ),
+          if (showNavigation)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: InkWell(
+                onTap: () => context.go('/employer/company/profile'),
+                customBorder: const CircleBorder(),
+                child: const CircleAvatar(
+                  radius: 15,
+                  backgroundColor: AppColors.blueTint,
+                  child: Icon(Icons.person, size: 18, color: AppColors.navy),
+                ),
+              ),
+            ),
+          ...actions,
+        ],
+        leadingWidth: 44,
+        leading: IconButton(
+          tooltip: 'Quay lại',
+          onPressed: () =>
+              context.canPop() ? context.pop() : context.go('/choose-role'),
+          icon: Image.asset(
+            'assets/images/career_match_logo.png',
+            width: 24,
+            height: 24,
+          ),
         ),
       ),
-    ),
-    bottomNavigationBar: bottom == null
-        ? null
-        : SafeArea(
-            top: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: bottom!,
-            ),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: child,
           ),
+        ),
+      ),
+      bottomNavigationBar: !showNavigation
+          ? bottom == null
+                ? null
+                : SafeArea(
+                    top: false,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: bottom!,
+                    ),
+                  )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (bottom != null)
+                  SafeArea(
+                    top: false,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: bottom!,
+                    ),
+                  ),
+                EmployerConsoleNav(selectedIndex: selectedIndex),
+              ],
+            ),
+    );
+  }
+}
+
+class EmployerConsoleNav extends StatelessWidget {
+  const EmployerConsoleNav({required this.selectedIndex, super.key});
+  final int selectedIndex;
+
+  static const _paths = [
+    '/employer/dashboard',
+    '/employer/jobs',
+    '/employer/candidates',
+    '/employer/interviews',
+    '/employer/company/profile',
+  ];
+
+  @override
+  Widget build(BuildContext context) => NavigationBar(
+    height: 60,
+    selectedIndex: selectedIndex,
+    labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+    onDestinationSelected: (index) => context.go(_paths[index]),
+    destinations: const [
+      NavigationDestination(
+        icon: Icon(Icons.dashboard_outlined),
+        selectedIcon: Icon(Icons.dashboard),
+        label: 'Tổng quan',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.work_outline),
+        selectedIcon: Icon(Icons.work),
+        label: 'Tin tuyển',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.people_outline),
+        selectedIcon: Icon(Icons.people),
+        label: 'Ứng viên',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.calendar_month_outlined),
+        selectedIcon: Icon(Icons.calendar_month),
+        label: 'Phỏng vấn',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.business_outlined),
+        selectedIcon: Icon(Icons.business),
+        label: 'Công ty',
+      ),
+    ],
   );
 }
 

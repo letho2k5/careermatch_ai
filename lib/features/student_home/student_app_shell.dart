@@ -38,6 +38,12 @@ class StudentAppShell extends StatelessWidget {
         ],
       ),
       actions: [
+        if (selectedTab == 1)
+          IconButton(
+            tooltip: 'Tìm việc làm',
+            onPressed: () => context.push('/jobs/search'),
+            icon: const Icon(Icons.search),
+          ),
         IconButton(
           onPressed: () => _notAvailable(context),
           icon: const Icon(Icons.notifications_none),

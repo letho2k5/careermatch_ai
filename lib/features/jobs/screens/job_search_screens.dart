@@ -41,7 +41,7 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return JobScreenScaffold(
-      title: 'Tìm việc làm',
+      title: 'Job Filters',
       actions: [
         IconButton(
           tooltip: 'Đóng',
@@ -49,94 +49,113 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
           icon: const Icon(Icons.close),
         ),
       ],
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _searchControls(),
-            const SizedBox(height: 10),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _filterChip('Toàn thời gian', true),
-                  _filterChip('Thực tập ngắn hạn (3 tháng)', false),
-                  _filterChip('Làm việc từ xa', false),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            _smartMatchCard(context),
-            const SizedBox(height: 18),
-            _livePreview(context),
-            const SizedBox(height: 22),
-            JobSectionTitle(
-              'Lịch sử tìm kiếm',
-              trailing: TextButton(
-                onPressed: () {},
-                child: const Text('Xóa tất cả'),
-              ),
-            ),
-            Wrap(
-              spacing: 8,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 6),
+            child: Column(
               children: [
-                _historyChip(context, 'Thực tập Python TP.HCM'),
-                _historyChip(context, 'Backend NodeJS'),
-                _historyChip(context, 'Data Engineer fresher'),
+                _searchControls(),
+                const SizedBox(height: 8),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _filterChip('Toàn thời gian', true),
+                      _filterChip('Thực tập ngắn hạn (3 tháng)', false),
+                      _filterChip('Làm việc từ xa', false),
+                    ],
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 20),
-            const JobSectionTitle('Xu hướng tìm kiếm sinh viên'),
-            const SizedBox(height: 6),
-            const Text(
-              'Cập nhật 1 giờ trước',
-              style: TextStyle(color: AppColors.textMuted, fontSize: 11),
-            ),
-            const SizedBox(height: 8),
-            for (final term in [
-              'Thực tập sinh AI',
-              'Frontend ReactJS',
-              'DevOps Cloud Intern',
-              'SDG-8 Verified Companies',
-            ])
-              Material(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                  leading: const Icon(Icons.trending_up, color: AppColors.blue),
-                  title: Text(
-                    term,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: const Text('Việc làm được sinh viên quan tâm'),
-                  trailing: const Icon(Icons.north_east, size: 18),
-                  onTap: () => _setAndOpen(term),
-                ),
-              ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceMuted,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: const Row(
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.lightbulb_outline, color: AppColors.blue),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      'Bạn chưa có CV chuẩn chỉnh? Hoàn thiện hồ sơ để nhận gợi ý việc làm phù hợp hơn.',
-                      style: TextStyle(fontSize: 12, height: 1.4),
+                  _smartMatchCard(context),
+                  const SizedBox(height: 18),
+                  _livePreview(context),
+                  const SizedBox(height: 22),
+                  JobSectionTitle(
+                    'Lịch sử tìm kiếm',
+                    trailing: TextButton(
+                      onPressed: () {},
+                      child: const Text('Xóa tất cả'),
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      _historyChip(context, 'Thực tập Python TP.HCM'),
+                      _historyChip(context, 'Backend NodeJS'),
+                      _historyChip(context, 'Data Engineer fresher'),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const JobSectionTitle('Xu hướng tìm kiếm sinh viên'),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Cập nhật 1 giờ trước',
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+                  ),
+                  const SizedBox(height: 8),
+                  for (final term in [
+                    'Thực tập sinh AI',
+                    'Frontend ReactJS',
+                    'DevOps Cloud Intern',
+                    'SDG-8 Verified Companies',
+                  ])
+                    Material(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                        ),
+                        leading: const Icon(
+                          Icons.trending_up,
+                          color: AppColors.blue,
+                        ),
+                        title: Text(
+                          term,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: const Text(
+                          'Việc làm được sinh viên quan tâm',
+                        ),
+                        trailing: const Icon(Icons.north_east, size: 18),
+                        onTap: () => _setAndOpen(term),
+                      ),
+                    ),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceMuted,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.lightbulb_outline, color: AppColors.blue),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Bạn chưa có CV chuẩn chỉnh? Hoàn thiện hồ sơ để nhận gợi ý việc làm phù hợp hơn.',
+                            style: TextStyle(fontSize: 12, height: 1.4),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -176,7 +195,7 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
         onPressed: _submit,
         child: const Text('Tìm kiếm'),
       );
-      if (constraints.maxWidth < 380) {
+      if (constraints.maxWidth < 320) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [field, const SizedBox(height: 8), button],
@@ -396,7 +415,7 @@ class _SearchSuggestionsScreenState
 
   @override
   Widget build(BuildContext context) => JobScreenScaffold(
-    title: 'Gợi ý tìm kiếm',
+    title: 'Job Filters',
     actions: [
       IconButton(
         onPressed: () => context.go('/jobs/home'),

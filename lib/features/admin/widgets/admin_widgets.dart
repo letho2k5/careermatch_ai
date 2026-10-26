@@ -18,38 +18,120 @@ class AdminPage extends StatelessWidget {
   final bool login;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: const Color(0xFFF8F9FC),
-    appBar: login
+  Widget build(BuildContext context) {
+    final path = GoRouterState.of(context).uri.path;
+    final selectedIndex = path.startsWith('/admin/users')
+        ? 2
+        : path.startsWith('/admin/reports')
+        ? 3
+        : path.startsWith('/admin/settings') || path.startsWith('/admin/skills')
+        ? 4
+        : path.startsWith('/admin/companies') || path.startsWith('/admin/jobs')
+        ? 1
+        : 0;
+    final sectionLabel = switch (selectedIndex) {
+      1 => 'Duyệt',
+      2 => 'Người dùng',
+      3 => 'Báo cáo',
+      4 => 'Cài đặt',
+      _ => 'Tổng quan',
+    };
+    final pageBottom = login
         ? null
-        : AppBar(
-            backgroundColor: const Color(0xFFF8F9FC),
-            title: Text(title),
-            leading: IconButton(
-              onPressed: () => context.canPop()
-                  ? context.pop()
-                  : context.go('/admin/dashboard'),
-              icon: const Icon(Icons.arrow_back),
+        : bottom is AdminConsoleNav
+        ? bottom
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (bottom != null)
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: bottom!,
+                  ),
+                ),
+              AdminConsoleNav(selectedIndex: selectedIndex),
+            ],
+          );
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FC),
+      appBar: login
+          ? null
+          : AppBar(
+              toolbarHeight: 56,
+              backgroundColor: const Color(0xFFF8F9FC),
+              leadingWidth: 44,
+              leading: IconButton(
+                tooltip: 'Quay lại',
+                onPressed: () => context.canPop()
+                    ? context.pop()
+                    : context.go('/admin/dashboard'),
+                icon: Image.asset(
+                  'assets/images/career_match_logo.png',
+                  width: 24,
+                  height: 24,
+                ),
+              ),
+              titleSpacing: 4,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'ADMIN CONSOLE',
+                    style: TextStyle(
+                      color: AppColors.blue,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: .35,
+                    ),
+                  ),
+                  Text(
+                    sectionLabel,
+                    style: const TextStyle(
+                      color: AppColors.navy,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  tooltip: 'Thông báo',
+                  onPressed: () => context.go('/admin/notifications'),
+                  icon: const Icon(Icons.notifications_none, size: 21),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: InkWell(
+                    onTap: () => context.go('/admin/settings'),
+                    customBorder: const CircleBorder(),
+                    child: const CircleAvatar(
+                      radius: 15,
+                      backgroundColor: AppColors.blueTint,
+                      child: Icon(
+                        Icons.person,
+                        size: 18,
+                        color: AppColors.navy,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: child,
           ),
-    body: SafeArea(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 640),
-          child: child,
         ),
       ),
-    ),
-    bottomNavigationBar: bottom == null
-        ? null
-        : SafeArea(
-            top: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: bottom!,
-            ),
-          ),
-  );
+      bottomNavigationBar: pageBottom,
+    );
+  }
 }
 
 class AdminDemoNotice extends StatelessWidget {

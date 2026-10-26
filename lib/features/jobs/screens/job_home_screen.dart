@@ -23,41 +23,71 @@ class JobHomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton.icon(
-                    onPressed: () => context.push('/jobs/saved'),
-                    icon: const Icon(Icons.bookmarks_outlined, size: 18),
-                    label: const Text('Việc làm đã lưu'),
-                  ),
-                ),
-                InkWell(
-                  onTap: () => context.push('/jobs/search'),
-                  borderRadius: BorderRadius.circular(14),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 13,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.outline),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.search, color: AppColors.blue),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            'Vị trí thực tập, công nghệ, công ty...',
-                            style: TextStyle(color: AppColors.textMuted),
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => context.push('/jobs/search'),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          height: 48,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: AppColors.outline),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x08002549),
+                                blurRadius: 5,
+                                offset: Offset(0, 1),
+                              ),
+                            ],
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: AppColors.blue,
+                                size: 18,
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Vị trí thực tập, công nghệ, công ty...',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: AppColors.textMuted,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Icon(Icons.tune, color: AppColors.navy),
-                      ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: FilledButton.tonal(
+                        onPressed: () => context.push('/jobs/filters'),
+                        style: FilledButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          backgroundColor: AppColors.blueTint.withValues(
+                            alpha: .55,
+                          ),
+                          foregroundColor: AppColors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Icon(Icons.tune, size: 18),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 _homeHero(context),

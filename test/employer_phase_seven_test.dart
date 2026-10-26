@@ -57,7 +57,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Quản trị cơ hội nghề nghiệp'), findsOneWidget);
     expect(
-      find.textContaining('không phải analytics trực tiếp'),
+      find.textContaining('chưa kết nối hệ thống tuyển dụng'),
       findsOneWidget,
     );
   });
@@ -69,7 +69,19 @@ void main() {
       appRouter.go('/employer/dashboard');
       await tester.pumpAndSettle();
       expect(find.text('Quản trị cơ hội nghề nghiệp'), findsOneWidget);
+      expect(
+        find.text('SDG 8 · nội dung minh họa, chưa xác minh'),
+        findsOneWidget,
+      );
+      expect(find.byIcon(Icons.business_outlined), findsOneWidget);
       expect(find.text('142'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Thông báo'));
+      await tester.pump();
+      expect(
+        find.text('Thông báo nhà tuyển dụng chưa có trong bản demo.'),
+        findsOneWidget,
+      );
 
       appRouter.go('/employer/jobs');
       await tester.pumpAndSettle();

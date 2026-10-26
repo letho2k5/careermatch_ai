@@ -18,7 +18,7 @@ class JobFiltersScreen extends ConsumerWidget {
     final count = controller.results(useDraftFilters: true).length;
 
     return JobScreenScaffold(
-      title: 'Bộ lọc tìm kiếm',
+      title: 'Job Filters',
       actions: [
         IconButton(
           tooltip: 'Thiết lập lại',
@@ -347,7 +347,27 @@ class _JobSortScreenState extends ConsumerState<JobSortScreen> {
     final controller = ref.read(jobDiscoveryProvider.notifier);
     return Scaffold(
       backgroundColor: AppColors.canvas,
-      appBar: AppBar(title: const Text('Sắp xếp việc làm')),
+      appBar: AppBar(
+        title: const Text('Job Filters'),
+        actions: [
+          IconButton(
+            tooltip: 'Đóng',
+            onPressed: () => context.pop(),
+            icon: const Icon(Icons.close),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: InkWell(
+              onTap: () => context.go('/student-profile-setup-1'),
+              customBorder: const CircleBorder(),
+              child: const CircleAvatar(
+                radius: 15,
+                backgroundImage: AssetImage('assets/images/student_avatar.png'),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           ListView(

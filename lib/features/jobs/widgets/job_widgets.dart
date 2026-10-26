@@ -46,7 +46,20 @@ class JobScreenScaffold extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
           ),
       title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-      actions: actions,
+      actions: [
+        ...actions,
+        Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: InkWell(
+            onTap: () => context.go('/student-profile-setup-1'),
+            customBorder: const CircleBorder(),
+            child: const CircleAvatar(
+              radius: 15,
+              backgroundImage: AssetImage('assets/images/student_avatar.png'),
+            ),
+          ),
+        ),
+      ],
     ),
     body: SafeArea(top: false, child: body),
     bottomNavigationBar: bottomAction == null

@@ -13,13 +13,7 @@ class EmployerDashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final company = ref.watch(employerDemoProvider).company;
     return EmployerPage(
-      title: 'Bảng điều khiển',
-      actions: [
-        IconButton(
-          onPressed: () => context.go('/employer/company/profile'),
-          icon: const Icon(Icons.account_circle_outlined),
-        ),
-      ],
+      title: 'Employer Dashboard',
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
         child: Column(
@@ -30,37 +24,114 @@ class EmployerDashboardScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.navy, AppColors.blue],
-                ),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x0D000000),
+                    blurRadius: 2,
+                    offset: Offset(0, 1),
+                  ),
+                ],
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'CAREERMATCH RECRUITER',
-                    style: TextStyle(
-                      color: AppColors.blueTint,
-                      fontSize: 11,
-                      letterSpacing: .5,
-                    ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceMuted,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.business_outlined,
+                          color: AppColors.navy,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Chào buổi sáng · Talent Acquisition',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              company['name']?.isNotEmpty == true
+                                  ? 'Xin chào, ${company['name']}'
+                                  : 'Quản trị cơ hội nghề nghiệp',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: AppColors.navy,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: IconButton(
+                          tooltip: 'Chỉnh sửa thông tin công ty',
+                          onPressed: () =>
+                              context.go('/employer/company/profile'),
+                          style: IconButton.styleFrom(
+                            backgroundColor: AppColors.surfaceMuted,
+                          ),
+                          icon: const Icon(
+                            Icons.edit_outlined,
+                            color: AppColors.navy,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    company['name']?.isNotEmpty == true
-                        ? 'Xin chào, ${company['name']}'
-                        : 'Quản trị cơ hội nghề nghiệp',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 19,
-                      fontWeight: FontWeight.w700,
+                  const SizedBox(height: 12),
+                  Container(
+                    height: 31,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.successTint.withValues(alpha: .3),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Số liệu minh họa · không phải analytics trực tiếp',
-                    style: TextStyle(color: AppColors.blueTint, fontSize: 12),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.eco_outlined,
+                          color: AppColors.success,
+                          size: 16,
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            'SDG 8 · nội dung minh họa, chưa xác minh',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColors.success,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: .2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -355,8 +426,18 @@ class _EmployerTabs extends StatelessWidget {
           path: '/employer/jobs',
         ),
         _Tab(
+          label: 'Ứng viên',
+          active: selected == 'Ứng viên',
+          path: '/employer/candidates',
+        ),
+        _Tab(
+          label: 'Phỏng vấn',
+          active: selected == 'Phỏng vấn',
+          path: '/employer/interviews',
+        ),
+        _Tab(
           label: 'Công ty',
-          active: false,
+          active: selected == 'Công ty',
           path: '/employer/company/profile',
         ),
       ],
@@ -380,7 +461,7 @@ class _Tab extends StatelessWidget {
       child: FittedBox(
         child: Text(
           label,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
         ),
       ),
     ),
